@@ -1,35 +1,49 @@
-$(function() {
-  $(".overlay").show();
-  getFromDB(drawChart)  
-  $('form').on('submit',function(e){
+var stock = (function(){
+  // initialization
+  var stocks = [];
+  datahandler.getFromDB(chart.draw,addToList);
+  $('body').tooltip({selector: '.createdLi'});
+  
+  // cache dom
+  var $el = $('#symbolContainer');
+  var template = $el.find('#stock-template').html();
+  var $input = $el.find('input');
+  var $ul = $el.find('#searchlist')
+  var $existingsyms = $ul.find("span");
+  
+  // bind events
+  $('form').on('submit',searchStock);
+  $ul.delegate('span.remove', 'click', deleteStock);
+  
+  
+  function searchStock(e){
     e.preventDefault();
-    var input = $('#symbol').val().toUpperCase();
-    $('#symbol').val('');
-    var IDs = [];
-    $("ul").find("span").each(function(){ IDs.push(this.id); });
-    if(IDs.indexOf(input)==-1){
-      $(".overlay").show();
-      getNew(input,drawChart,true,1)
+    var newsym = $input.val().toUpperCase();
+    $input.val('');
+    var stocklist = chart.stockList();
+    if(stocklist.indexOf(newsym)==-1){
+      datahandler.getNew(newsym,chart.draw,addToList,true,1)     
     } else {
       alert('Stock already added')
     }
-  })  
-});
+  };
+  
+  function deleteStock(){
+    var id = this.id;
+    //remove from chart
+    chart.remove(id);
+    // remove from list
+    $(this).parent('li').remove();
+    // remove from DB
+    datahandler.removeFromDB(id)
 
-$(document).on("click", ".remove", function(){
-   var id = this.id;
-   chart.get(this.id).remove();
-   $.ajax({
-      url:'/delete/'+id
-    }).done(function(data){
-      // emit to server
-       socket.emit('delete',id);
-    }).fail(function(data){
-      if ( data.responseCode) {console.log( data.responseCode )};
-    })
-   $(this).parent('li').remove();
-});
-
-$('body').tooltip({
-    selector: '.createdLi'
-});
+  };
+  
+  function addToList(symbol,name,color){
+    var colorstyle = "border-left-color:"+color;
+    $ul.append(Mustache.render(template,{color:colorstyle, name:name, symbol:symbol}));
+  }
+  
+  return {addToList:addToList}
+  
+})()

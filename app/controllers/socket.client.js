@@ -1,30 +1,30 @@
-var socket;
-
-$(function(){
-  socket = io();
-
+var socket = (function(){
+  var socket = io();
   socket.on('otheradded',function(dataobj){
-    var plotSymbol = dataobj['rawdata']['dataset_code'];
-    $.notify("Someone just added "+plotSymbol, 
+    var color = datahandler.getColor();
+    var name = dataobj['rawdata']['name'];
+    var symbol = dataobj['rawdata']['dataset_code'];
+    $.notify("Someone just added "+symbol, 
              { position:"bottom left",
                style: 'bootstrap',
                 className: 'info'
              }
-            );
-
-      var plotData = shapeData(dataobj['rawdata']);
-      var name = dataobj['rawdata']['name'];
-      drawChart(plotData,plotSymbol,name)
+          );
+      chart.draw(dataobj['rawdata'],symbol,name,color)
+      stock.addToList(symbol,name,color)
   })
+  
   socket.on('otherdeleted',function(id){
     $.notify("Someone else just removed "+id, 
          { position:"bottom left",
            style: 'bootstrap',
             className: 'info'
          }
-        );
+      );
     $('#'+id).parent('li').remove();
-    chart.get(id).remove();
-   
+    chart.remove(id);
   })
-})
+  
+  return {socket:socket}
+
+})();

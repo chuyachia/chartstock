@@ -5,8 +5,8 @@ const https = require('https'),
       Stocks = require(process.cwd()+'/app/models/stocks.js');
 
 
-function searchHandler(io){  
- 
+function searchHandler(){  
+  
   this.getDBdata = function(req,res){   
     Stocks.find().exec(function(err,result){
       result.forEach(function(stock){
@@ -20,7 +20,6 @@ function searchHandler(io){
   }
   
   this.deleteDBdata = function(req,res){
-    //io.sockets.emit('delete',req.params.symbol);
     Stocks.find({symbol:req.params.symbol}).remove().exec(function(err,result){
       if (err) {return err;}
       console.log('Deleted from DB')
@@ -59,7 +58,6 @@ function searchHandler(io){
               return console.log("succesfully saved");
           });                    
         }
-        //io.sockets.emit('newdata',responseObject);
         res.send(responseObject);        
       })
     })
