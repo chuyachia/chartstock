@@ -10,18 +10,22 @@
       <div id="loading-img"></div>
     </div>
     <div class="content">
-      <div id="chartContainer" class="col-sm-9">
+      <div id="chartContainer" class="col-md-9">
       </div>
-      <div id="symbolContainer" class="col-sm-3">
+      <div id="symbolContainer" class="col-md-3">
         
         <h4>Stocks that people are tracking</h4>
         <ul class="list-unstyled" id="searchlist">
+          <script id="stock-template" type="text/template">
+            <li style={{color}}>
+                <span class="createdLi" data-toggle="tooltip" data-placement="bottom" title="{{name}}">{{symbol}}</span>
+                <span class="glyphicon glyphicon-remove remove" id={{symbol}}></span>
+            </li>
+          </script>
         </ul>
-
-
         <form>
           <div class="input-group">
-            <input type="search" class="form-control" id="symbol" placeholder="Enter stock symbol here" required autofocus>
+            <input type="search" class="form-control" placeholder="Enter stock symbol here" required autofocus>
             <span class="input-group-btn">
               <button type="submit" class="btn btn-info">
                 <span class="glyphicon glyphicon-search"></span>
@@ -29,13 +33,11 @@
           </span>            
           </div>   
         </form>
-        <i class="note">Prices are adjusted for dividends, splits and other events</i>
-
       </div>
  </div>
     <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.1.2/mustache.min.js"></script>
     <script src="https://code.highcharts.com/stock/highstock.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>   
