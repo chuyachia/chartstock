@@ -1,23 +1,17 @@
-var stock = (function(){
-  // initialization
-  var stocks = [];
-  datahandler.getFromDB(chart.draw,addToList);
-  $('body').tooltip({selector: '.createdLi'});
-  
-  // cache dom
-  var $el = $('#symbolContainer');
-  var template = $el.find('#stock-template').html();
-  var $input = $el.find('input');
-  var $ul = $el.find('#searchlist')
-  var $existingsyms = $ul.find("span");
-  
-  // bind events
-  $('form').on('submit',searchStock);
-  $ul.delegate('span.remove', 'click', deleteStock);
-  
+var chart = require('./plot.client.js');
+var datahandler = require('./data.client.js');
+var Mustache = require('mustache');
+
+var input = (function(){
+    var $el = $('#symbolContainer');
+    var template = $el.find('#stock-template').html();
+    var $input = $el.find('input');
+    var $ul = $el.find('#searchlist')
+
   
   function searchStock(e){
     e.preventDefault();
+    
     var newsym = $input.val().toUpperCase();
     $input.val('');
     var stocklist = chart.stockList();
@@ -30,11 +24,8 @@ var stock = (function(){
   
   function deleteStock(){
     var id = this.id;
-    //remove from chart
     chart.remove(id);
-    // remove from list
     $(this).parent('li').remove();
-    // remove from DB
     datahandler.removeFromDB(id)
 
   };
@@ -44,6 +35,12 @@ var stock = (function(){
     $ul.append(Mustache.render(template,{color:colorstyle, name:name, symbol:symbol}));
   }
   
-  return {addToList:addToList}
+  return {
+    addToList:addToList,
+    searchStock:searchStock,
+    deleteStock:deleteStock
+  }
   
 })()
+
+module.exports = input;

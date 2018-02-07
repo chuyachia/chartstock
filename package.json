@@ -2,7 +2,6 @@
   "//1": "describes your app and its dependencies",
   "//2": "https://docs.npmjs.com/files/package.json",
   "//3": "updating this file will download and update your packages",
-
   "name": "stockmarket-chuya",
   "version": "0.0.1",
   "description": "App that allows you to chart the stock market",
@@ -12,8 +11,11 @@
   },
   "dependencies": {
     "express": "^4.16.2",
-    "socket.io":"2.0.4",
-    "mongoose": "^4.1.0"
+    "mongoose": "^4.1.0",
+    "mustache": "^2.3.0",
+    "socket.io": "2.0.4",
+    "socket.io-client": "^2.0.4",
+    "webpack": "^3.10.0"
   },
   "engines": {
     "node": "8.x"
