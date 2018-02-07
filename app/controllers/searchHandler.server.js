@@ -10,6 +10,7 @@ function searchHandler(){
   this.getDBdata = function(req,res){   
     Stocks.find().exec(function(err,result){
       result.forEach(function(stock){
+        // Check if data is up to date
         var today = new Date().toISOString().split('T')[0]
         if (stock['added'].toISOString().split('T')[0]!= today){
           stock['dataset']['data'] = []

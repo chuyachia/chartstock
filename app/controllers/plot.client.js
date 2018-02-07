@@ -85,4 +85,4 @@ var chart = (function(){
     };  
 })()
 
-
+module.exports = chart;
