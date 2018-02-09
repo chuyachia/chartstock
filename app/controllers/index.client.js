@@ -16,7 +16,6 @@ $(document).ready(function () {
        $.ajax({
         url:'/db'
       }).done(function(data){
-         console.log(data);
          var toupdate = []
          data.forEach(function(stock){
            if (stock['dataset']['data'].length>0) {
@@ -35,7 +34,6 @@ $(document).ready(function () {
 
          if (toupdate.length>0) {
            toupdate.forEach(function(symbol){
-             console.log('getnew')
              datahandler.getNew(symbol,chart.draw,input.addToList,false,toupdate.length);
            })
          } else {   

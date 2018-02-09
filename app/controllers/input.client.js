@@ -1,3 +1,5 @@
+'use strict';
+
 var chart = require('./plot.client.js');
 var datahandler = require('./data.client.js');
 var Mustache = require('mustache');
